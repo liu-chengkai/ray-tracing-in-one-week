@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "vector.h"
 using namespace std;
 
 
@@ -21,9 +22,10 @@ int main()
             float r = float(i) / float(Width);
             float g = float(j) / float(Height);
             float b = 0.2;
-            int ir = int(255.99*r);
-            int ig = int(255.99*g);
-            int ib = int(255.99*b);
+            vector3 rgb(r, g, b);
+            int ir = int(255.99 * rgb.x);
+            int ig = int(255.99 * rgb.y);
+            int ib = int(255.99 * rgb.z);
             file << ir << " " << ig << " " << ib << "\n";
         }
     } 
