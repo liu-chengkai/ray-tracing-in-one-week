@@ -9,7 +9,7 @@ vec3 ray::get_origin() const
     return origin;
 }
 
-vec3 ray::get_direction()
+vec3 ray::get_direction() const
 {
     return direction;
 }
