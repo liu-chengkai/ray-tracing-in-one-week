@@ -5,24 +5,30 @@
 #include "ray.h"
 using namespace std;
 
-bool hit_sphere(const vec3& center, float radius, const ray& r)
+float hit_sphere(const vec3& center, float radius, const ray& r)
 {
     vec3 oc = r.get_origin() - center;
     float a = r.get_direction().dot(r.get_direction());
     float b = r.get_direction().dot(oc) * 2;
     float c = oc.dot(oc) - radius * radius;
     float discriminant = b * b - 4 * a * c;
-    return discriminant > 0;
+    if (discriminant < 0)
+    {
+        return -1;
+    }
+    return (-b - sqrt(discriminant)) / 2 * a;
 }
 
 vec3 color(ray& r)
 {
-    if (hit_sphere(vec3(0, 0, -1), 0.5, r))
+    float t = hit_sphere(vec3(0, 0, -1), 0.5, r);
+    if (t > 0)
     {
-        return vec3(1, 0, 0);
+        vec3 normal = r.get_point_at_parameter(t) - vec3(0, 0, -1);
+        return vec3(normal.x + 1, normal.y + 1, normal.z + 1) * 0.5;
     }
     vec3 unitRay = r.get_direction().get_normalized();
-    float t = 0.5 * (unitRay.y + 1);
+    t = 0.5 * (unitRay.y + 1);
     vec3 c = vec3(1, 1, 1) * (1 - t) + vec3(0.5, 0.7, 1) * t;
     return c;
 }
