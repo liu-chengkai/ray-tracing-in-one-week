@@ -5,12 +5,22 @@
 class vec3
 {
     public:
+        vec3(){
+            x = 0;
+            y = 0;
+            z = 0;
+        }
         vec3(float x, float y, float z) : x(x), y(y), z(z)
         {
         }
         float x;
         float y;
         float z;
+
+        inline const vec3 operator+() const
+        {
+            return *this;
+        }
 
         inline const vec3 operator-() const
         {
@@ -49,24 +59,24 @@ class vec3
             return *this;
         }
 
-        inline vec3 operator-(const vec3& v)
+        friend vec3 operator-(const vec3& v1, const vec3& v2)
         {
-            return vec3(x - v.x, y - v.y, z - v.z);
+            return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
         }
 
-        inline vec3 operator+(const vec3& v)
+        friend vec3 operator+(const vec3& v1, const vec3& v2)
         {
-            return vec3(x + v.x, y + v.y, z + v.z);
+            return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
         }
 
-        inline vec3 operator/(const vec3& v)
+        friend vec3 operator/(const vec3& v1, const vec3& v2)
         {
-            return vec3(x / v.x, y / v.y, z / v.z);
+            return vec3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
         }
 
-        inline vec3 operator*(const vec3& v)
+        friend vec3 operator*(const vec3& v1, const vec3& v2)
         {
-            return vec3(x * v.x, y * v.y, z * v.z);
+            return vec3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
         }
 
         inline std::istream& operator>>(std::istream& is)
@@ -79,16 +89,6 @@ class vec3
         {
             os << x << " " << y << " " << z;
             return os;
-        }
-
-        inline float dot(const vec3& v)
-        {
-            return x * v.x + y * v.y + z * v.z;
-        }
-
-        inline vec3 cross(const vec3& v)
-        {
-            return vec3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
         }
 
         inline vec3& operator-=(const float v)
@@ -123,24 +123,39 @@ class vec3
             return *this;
         }
 
-        inline vec3 operator-(const float s)
+        friend inline vec3 operator-(const vec3 &vec, const float s)
         {
-            return vec3(x - s, y - s, z - s);
+            return vec3(vec.x - s, vec.y - s, vec.z - s);
         }
 
-        inline vec3 operator+(const float s)
+        friend inline vec3 operator-(const float s, const vec3 &vec)
         {
-            return vec3(x + s, y + s, z + s);
+            return -vec + s;
         }
 
-        inline vec3 operator/(const float s)
+        friend inline vec3 operator+(const vec3 &vec, const float s)
         {
-            return vec3(x / s, y / s, z / s);
+            return vec3(vec.x + s, vec.y + s, vec.z + s);
         }
 
-        inline vec3 operator*(const float s)
+        friend inline vec3 operator+(const float s, const vec3 &vec)
         {
-            return vec3(x * s, y * s, z * s);
+            return vec + s;
+        }
+
+        friend inline vec3 operator/(const vec3 &vec, const float s)
+        {
+            return vec3(vec.x / s, vec.y / s, vec.z / s);
+        }
+
+        friend vec3 operator*(const vec3 &vec, const float s)
+        {
+            return vec3(vec.x * s, vec.y * s, vec.z * s);
+        }
+
+        friend vec3 operator*(const float s, const vec3 &vec)
+        {
+            return vec * s;
         }
 
         inline void normalize()
@@ -168,4 +183,18 @@ inline std::ostream& operator<<(std::ostream& os, const vec3& v)
 {
     os << v.x << " " << v.y << " " << v.z;
     return os;
+}
+
+inline float dot(const vec3& v1, const vec3& v2)
+{
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+inline vec3 cross(const vec3& v1, const vec3& v2)
+{
+    return vec3(
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    );
 }

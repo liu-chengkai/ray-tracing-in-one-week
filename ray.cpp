@@ -14,7 +14,7 @@ vec3 ray::get_direction() const
     return direction;
 }
 
-vec3 ray::get_point_at_parameter(float t)
+vec3 ray::get_point_at_parameter(float t) const
 {
     return origin + direction * t;
 }
