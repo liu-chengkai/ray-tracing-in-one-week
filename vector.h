@@ -163,17 +163,17 @@ class vec3
             *this /= magnitude();
         }
 
-        inline vec3 get_normalized()
+        inline vec3 get_normalized() const
         {
             return vec3(x, y, z) / magnitude();
         }
 
-        inline float magnitude()
+        inline float magnitude() const
         {
             return sqrt(squared_magnitude());
         }
         
-        inline float squared_magnitude()
+        inline float squared_magnitude() const
         {
             return x * x + y * y + z * z;
         }
@@ -197,4 +197,27 @@ inline vec3 cross(const vec3& v1, const vec3& v2)
         v1.z * v2.x - v1.x * v2.z,
         v1.x * v2.y - v1.y * v2.x
     );
+}
+
+inline double rand01()
+{
+    return double(rand()) / double(RAND_MAX);
+}
+
+inline vec3 random_in_unit_disk(){
+    while (true) {
+        vec3 p = vec3(rand01() * 2 - 1, rand01() * 2 - 1, 0);
+        if (p.squared_magnitude() >= 1) continue;
+        return p;
+    }
+}
+
+inline vec3 random_point_in_unit_radius_sphere()
+{
+    vec3 p;
+    do
+    {
+        p = 2.0 * vec3(rand01(), rand01(), rand01()) - vec3(1, 1, 1);
+    } while (p.squared_magnitude() >= 1.0);
+    return p;
 }
